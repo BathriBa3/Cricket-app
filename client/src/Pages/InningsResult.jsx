@@ -13,7 +13,7 @@ const InningsResult = () => {
        
        console.log(redux,"redux")
        let request = {...redux,"winner": winner}
-       let response = await axios.post("http://localhost:5000/endInnings",request)
+       let response = await axios.post(`${import.meta.env.VITE_API_URL}/endInnings`,request)
         
         
     }
