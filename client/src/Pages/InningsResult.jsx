@@ -1,10 +1,12 @@
-import React from 'react';
+import React,  { useEffect, useState }from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios'
+import MatchSummary from './MatchSummary';
 
 const InningsResult = () => {
 	const score = useSelector((state) => state.secondInnings.totalScore);
 	const targetScore = useSelector((state) => state.secondInnings.targetScore);
+	const [showMatchSummary,setShowMatchSummary] = useState(false);
 	const { battingTeam, bowlingTeam } = useSelector((state) => state.match);
 	const battingTeamWon = score >= targetScore;
 	const winner = battingTeamWon ? battingTeam : bowlingTeam;
@@ -14,9 +16,14 @@ const InningsResult = () => {
        console.log(redux,"redux")
        let request = {...redux,"winner": winner}
        let response = await axios.post(`${import.meta.env.VITE_API_URL}/endInnings`,request)
-        
-        
+	   console.log(response,"response")
+	   if(response.data && response.data.message && response.data.message === "Material created successfully"){
+		setShowMatchSummary(true)
+	   }
     }
+	if(showMatchSummary){
+		return <MatchSummary></MatchSummary>
+	}
 	return (
 		<section className="match-result rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-6 text-center sm:p-8">
 			<p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-300">Match result</p>
